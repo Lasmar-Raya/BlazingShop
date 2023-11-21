@@ -1,0 +1,40 @@
+﻿@page "/"
+@page "/{categoryurl}"
+
+@inject ICategoryServices categoryServices
+
+@* Add the razor component "ProductList" from the Shared folder to the index page *@
+
+
+@if(category != null)
+{
+    <h1>Welcome to the @category.Name section !</h1>
+    <ProductList CategoryId="@category.Id"/>
+}
+else
+{
+    <h1>Welcome to Blazing Shop !</h1>
+    <ProductList />
+}
+
+@code{
+    [Parameter]
+    public string CategoryUrl { get; set; }
+
+    private Category category = null;
+
+    // protected override void OnInitialized()
+    // {
+    //     base.OnInitialized();
+    // }
+
+
+    //the categoryUrl is set by clicking on the navmenu because the link is defined as the categoryUrl which takes us to the category
+    protected override void OnParametersSet()
+    {
+        if (CategoryUrl != null)
+        {
+            category = categoryServices.Categories.FirstOrDefault(c => c.Url.ToLower().Equals(CategoryUrl.ToLower()));
+        }
+    }
+}
